@@ -10,4 +10,12 @@ public class ProductList {
 		int id = this.products.size() + 1;
 		this.products.add( new Product(id, name, price, quantity, image, description, category) );
 	}
+	
+	public Product getProductById(int id) {
+		try {
+			return this.products.get(id);
+		} catch(IndexOutOfBoundsException e) {
+			return null;
+		}
+	}
 }
