@@ -18,4 +18,12 @@ public class ProductList {
 			return null;
 		}
 	}
+	
+	public void removeProduct(int id) {
+		this.products.remove(id);
+	}
+	
+	public int getTotalNumOfProducts() {
+		return this.products.size();
+	}
 }

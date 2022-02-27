@@ -156,7 +156,27 @@ public class InventoryMgmtSys {
 		}
 	}
 	
+	public static void removeProduct() {
+		System.out.println("Please enter the product id:");
+		String productId = in.nextLine();
+		Product selectedProduct = null;
+		
+		try {
+			selectedProduct = productList.getProductById( Integer.parseInt(productId) );
+		} catch(NumberFormatException e) {
+		}
+		
+		if( selectedProduct != null ) {
+			productList.removeProduct( Integer.parseInt(productId) );
+			System.out.println("Remaining products: " + productList.getTotalNumOfProducts());
+		} else {
+			System.out.println("Product not found!");
+		}
+	}
 	
+	public static void searchProduct() {
+		
+	}
 	
 	public static void main(String args[]) {
 		System.out.println("Starting Inventory Management System...");
@@ -181,10 +201,10 @@ public class InventoryMgmtSys {
 					editProduct();
 					break;
 				case "3":
-					System.out.println("Remove product here...");
+					removeProduct();
 					break;
 				case "4":
-					System.out.println("Search product here...");
+					searchProduct();
 					break;
 				default:
 					break;
