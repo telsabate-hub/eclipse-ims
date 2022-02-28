@@ -77,4 +77,10 @@ public class Product {
 	public void setCategory(String category) {
 		this.category = category;
 	}
+	
+	public String toString() {
+		return "Product id: " + this.id + "\nName: " + this.name + "\nPrice: " + this.price +
+				"\nQuantity: " + this.quantity + "\nDescription: " + this.description + 
+				"\nCategory: " + this.category;
+	}
 }

@@ -26,4 +26,26 @@ public class ProductList {
 	public int getTotalNumOfProducts() {
 		return this.products.size();
 	}
+	
+	public Product getProductByName(String name) {
+		for( int i = 0; i < this.products.size(); i++ ) {
+			if( this.products.get(i).getName().toLowerCase().equals(name.toLowerCase().trim()) ) {
+				return this.products.get(i);
+			}
+		}
+		
+		return null;
+	}
+	
+	public ArrayList<Product> getProductsByCategory(String category){
+		ArrayList<Product> productList = new ArrayList<>();
+		
+		for( int i = 0; i < this.products.size(); i++ ) {
+			if( this.products.get(i).getCategory().toLowerCase().equals( category.toLowerCase().trim() ) ) {
+				productList.add( this.products.get(i) );
+			}
+		}
+		
+		return productList;
+	}
 }

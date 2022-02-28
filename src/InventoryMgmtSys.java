@@ -1,3 +1,4 @@
+import java.util.ArrayList;
 import java.util.Scanner;
 
 public class InventoryMgmtSys {
@@ -175,7 +176,65 @@ public class InventoryMgmtSys {
 	}
 	
 	public static void searchProduct() {
+		Product selectedProduct = null;
 		
+		System.out.println("\nSearch By:");
+		System.out.println("[1] Id");
+		System.out.println("[2] Name");
+		System.out.println("[3] Category");
+		System.out.println("[X] Cancel");
+		
+		String selectedMenu = in.nextLine();
+		
+		switch( selectedMenu ) {
+			case "1":
+				System.out.println("Please enter the product id:");
+				String productId = in.nextLine();
+				
+				try {
+					selectedProduct = productList.getProductById( Integer.parseInt(productId) );
+				} catch(NumberFormatException e) {
+				}
+				
+				if( selectedProduct != null ) {
+					System.out.println("\nProduct Details:\n " + selectedProduct);
+				} else {
+					System.out.println("Product not found!");
+				}
+				
+				break;
+			case "2":
+				System.out.println("Please enter the product name:");
+				String productName = in.nextLine();
+				
+				selectedProduct = productList.getProductByName( productName );
+				
+				if( selectedProduct != null ) {
+					System.out.println("\nProduct Details:\n" + selectedProduct);
+				} else {
+					System.out.println("Product not found!");
+				}
+				
+				break;
+			case "3":
+				System.out.println("Please enter the product category:");
+				String category = in.nextLine();
+				
+				ArrayList<Product> productsInCategory = productList.getProductsByCategory(category);
+				
+				if( productsInCategory.size() > 0 ) {
+					for( int i = 0; i < productsInCategory.size(); i++ ) {
+						System.out.println( productsInCategory.get(i) );
+					}
+				} else {
+					System.out.println( "No products in that category!" );
+				}
+				
+				break;
+			default:
+				System.out.println("Product not found!");
+				break;
+		}
 	}
 	
 	public static void main(String args[]) {
