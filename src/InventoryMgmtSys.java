@@ -4,6 +4,7 @@ import java.util.Scanner;
 public class InventoryMgmtSys {
 	static Scanner in = new Scanner(System.in);
 	static ProductList productList = new ProductList();
+	static CategoryList categoryList = new CategoryList();
 	
 	public static void addNewProduct() {
 		int price = 0, quantity = 0;
@@ -182,7 +183,6 @@ public class InventoryMgmtSys {
 		System.out.println("[1] Id");
 		System.out.println("[2] Name");
 		System.out.println("[3] Category");
-		System.out.println("[X] Cancel");
 		
 		String selectedMenu = in.nextLine();
 		
@@ -237,6 +237,118 @@ public class InventoryMgmtSys {
 		}
 	}
 	
+	public static void showProductMenu() {
+		String selectedMenu = "";
+			
+		System.out.println("\nPlease select from the menu option below:");
+		System.out.println("[1] Add New Product");
+		System.out.println("[2] Edit Selected Product");
+		System.out.println("[3] Remove Selected Product");
+		System.out.println("[4] Search");
+		
+		selectedMenu = in.nextLine();
+		
+		switch( selectedMenu ) {
+			case "1":
+				addNewProduct();
+				break;
+			case "2":
+				editProduct();
+				break;
+			case "3":
+				removeProduct();
+				break;
+			case "4":
+				searchProduct();
+				break;
+			default:
+				System.out.println("Invalid menu option! Redirecting to main menu...");
+				break;
+		}
+
+	}
+	
+	public static void showCategoryMenu() {
+		String selectedMenu = "";
+		
+		System.out.println("\nPlease select from the menu option below:");
+		System.out.println("[1] Insert New Category");
+		System.out.println("[2] Update Selected Category");
+		System.out.println("[3] Delete Selected Category");
+		
+		selectedMenu = in.nextLine();
+		
+		switch( selectedMenu ) {
+			case "1":
+				System.out.println("Please enter the name of the category:");
+				String categoryName = in.nextLine();
+				categoryList.addCategory(categoryName);
+				System.out.println("Successfully added " + categoryName + " to the category list!");
+				
+				break;
+			case "2":
+				
+				if( categoryList.getTotalNumOfCategories() > 0 ) {
+					System.out.println("Select from the categories below:" + categoryList);
+					String id = in.nextLine();
+					String selectedCategory = null;
+					
+					try {
+						int idInt = Integer.parseInt(id);
+						selectedCategory = categoryList.getCategoryById( idInt );
+						
+						if( selectedCategory != null ) {
+							System.out.println("Please enter the name of the category:");
+							String newName = in.nextLine();
+							
+							categoryList.updateCategoryName(idInt, newName);
+							
+							System.out.println("Successfully updated category name!" + categoryList);
+							
+						} else {
+							System.out.println("Invalid category id selected!");
+						}
+					} catch(NumberFormatException e) {
+						System.out.println("Invalid category id selected!");
+					}
+					
+				} else {
+					System.out.println("No categories yet.");
+				}
+
+				break;
+			case "3":
+				
+				if( categoryList.getTotalNumOfCategories() > 0 ) {
+					System.out.println("Select from the categories below:" + categoryList);
+					String id = in.nextLine();
+					String selectedCategory = null;
+					
+					try {
+						int idInt = Integer.parseInt(id);
+						selectedCategory = categoryList.getCategoryById( idInt );
+						
+						if( selectedCategory != null ) {
+							categoryList.deleteCategory(idInt);
+							System.out.println("Successfully deleted category!" + categoryList);
+						} else {
+							System.out.println("Invalid category id selected!");
+						}
+					} catch(NumberFormatException e) {
+						System.out.println("Invalid category id selected!");
+					}
+					
+				} else {
+					System.out.println("No categories yet.");
+				}
+				
+				break;
+			default:
+				System.out.println("Invalid menu option! Redirecting to main menu...");
+				break;
+		}
+	}
+	
 	public static void main(String args[]) {
 		System.out.println("Starting Inventory Management System...");
 		String selectedMenu = "";
@@ -244,26 +356,26 @@ public class InventoryMgmtSys {
 		while( !selectedMenu.equals("q") ) {
 			
 			System.out.println("\nPlease select from the menu option below:");
-			System.out.println("[1] Add New Product");
-			System.out.println("[2] Edit Selected Product");
-			System.out.println("[3] Remove Selected Product");
-			System.out.println("[4] Search");
+			System.out.println("[1] Product");
+			System.out.println("[2] Category");
+			System.out.println("[3] Customer");
+			System.out.println("[4] Order");
 			System.out.println("[q] Quit");
 			
 			selectedMenu = in.nextLine();
 			
 			switch( selectedMenu ) {
 				case "1":
-					addNewProduct();
+					showProductMenu();
 					break;
 				case "2":
-					editProduct();
+					showCategoryMenu();
 					break;
 				case "3":
-					removeProduct();
+					
 					break;
 				case "4":
-					searchProduct();
+					
 					break;
 				default:
 					break;
