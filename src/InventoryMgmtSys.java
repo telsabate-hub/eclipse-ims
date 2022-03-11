@@ -5,9 +5,15 @@ public class InventoryMgmtSys {
 	static Scanner in = new Scanner(System.in);
 	static ProductList productList = new ProductList();
 	static CategoryList categoryList = new CategoryList();
+	static CustomerList customerList = new CustomerList();
 	
 	public static void addNewProduct() {
 		int price = 0, quantity = 0;
+		
+		if( categoryList.getTotalNumOfCategories() <= 0 ) {
+			System.out.println("Please add a category first before adding a product.");
+			return;
+		}
 		
 		System.out.println("Please enter the name of the product:");
 		String productName = in.nextLine();
@@ -17,10 +23,37 @@ public class InventoryMgmtSys {
 		
 		System.out.println("Please enter a description of the product:");
 		String productDescription = in.nextLine();
-		System.out.println("Please enter the category of the product:");
-		String productCategory = in.nextLine();
+		
+		String productCategory = getCategoryFromUser();
 		
 		productList.addProduct(productName, price, quantity, null, productDescription, productCategory);
+	}
+	
+	public static String getCategoryFromUser() {
+		boolean invalidInput;
+		String productCategory = null;
+		
+		do {
+			try {
+				invalidInput = false;	
+	
+				System.out.println("Please select from the product category from below:" + categoryList);
+				String category = in.nextLine();
+				
+				productCategory = categoryList.getCategoryById( Integer.parseInt(category) );
+			
+				if( productCategory == null ) {
+					System.out.println("Invalid category selected!");
+					invalidInput = true;
+				}
+			} catch( NumberFormatException e ) {
+				System.out.println("Invalid category selected!");
+				invalidInput = true;
+			}
+			
+		} while(invalidInput);
+		
+		return productCategory;
 	}
 
 	public static int getQuantityFromUser(int quantity) {
@@ -44,6 +77,7 @@ public class InventoryMgmtSys {
 				invalidInput = true;
 			}
 		} while(invalidInput);
+		
 		return quantity;
 	}
 
@@ -224,7 +258,7 @@ public class InventoryMgmtSys {
 				
 				if( productsInCategory.size() > 0 ) {
 					for( int i = 0; i < productsInCategory.size(); i++ ) {
-						System.out.println( productsInCategory.get(i) );
+						System.out.println( "\n" + productsInCategory.get(i) );
 					}
 				} else {
 					System.out.println( "No products in that category!" );
@@ -349,6 +383,123 @@ public class InventoryMgmtSys {
 		}
 	}
 	
+	public static void showCustomerMenu() {
+		String selectedMenu = "";
+		
+		System.out.println("\nPlease select from the menu option below:");
+		System.out.println("[1] Insert New Customer");
+		System.out.println("[2] Edit Customer");
+		System.out.println("[3] Remove Customer");
+		System.out.println("[4] Search Customer");
+		
+		selectedMenu = in.nextLine();
+		
+		switch( selectedMenu ) {
+			case "1":
+				addNewCustomer();
+				break;
+			case "2":
+
+				break;
+			case "3":
+				
+				break;
+			case "4":
+				searchCustomer();
+				break;
+			default:
+				System.out.println("Invalid menu option! Redirecting to main menu...");
+				break;
+		}
+	}
+	
+	public static void addNewCustomer() {
+		String firstName = "", lastName = "", phoneNumStr = "", email = null;
+		boolean isEmpty = false, isInvalid = false;
+		int phoneNum = 0;
+		
+		//first name
+		do {
+			isEmpty = false;
+			
+			System.out.println("Please enter the first name of the customer:");
+			firstName = in.nextLine();
+			firstName = firstName.trim();
+			
+			if( firstName.equals("") ) {
+				isEmpty = true;
+				System.out.println("Invalid first name!");
+			}
+			
+		} while( isEmpty );
+		
+		//last name
+		do {
+			isEmpty = false;
+			
+			System.out.println("Please enter the last name of the customer:");
+			lastName = in.nextLine();
+			lastName = lastName.trim();
+			
+			if( lastName.equals("") ) {
+				isEmpty = true;
+				System.out.println("Invalid last name!");
+			}
+			
+		} while( isEmpty );
+
+		//phone number
+		do {
+			try {
+				isInvalid = false;
+				
+				System.out.println("Please enter the phone number of the customer:");
+				phoneNumStr = in.nextLine();
+				
+				if( phoneNumStr.trim().equals("") ) {
+					isInvalid = true;
+					System.out.println("Invalid phone number!");
+				} else {
+					phoneNum = Integer.parseInt(phoneNumStr);
+				}
+				
+			} catch(NumberFormatException e) {
+				isInvalid = true;
+				System.out.println("Invalid phone number!");
+			}
+			
+		} while( isInvalid );
+		
+		//email
+		System.out.println("Please enter the email of the customer:");
+		email = in.nextLine();
+		
+		if( email.isEmpty() ) {
+			email = null;
+		}
+		
+		customerList.addCustomer(firstName, lastName, phoneNum, email);
+	}
+	
+	public static void searchCustomer() {
+		Customer customer = null;
+		String customerId = null;
+		
+		System.out.println("Please enter the customer id:");
+		customerId = in.nextLine();
+		
+		try {
+			customer = customerList.getCustomerById( Integer.parseInt(customerId) );
+		} catch(NumberFormatException e) {
+		}
+		
+		if( customer != null ) {
+			System.out.println("\nCustomer Details:\n" + customer);
+		} else {
+			System.out.println("Customer not found!");
+		}
+	}
+
 	public static void main(String args[]) {
 		System.out.println("Starting Inventory Management System...");
 		String selectedMenu = "";
@@ -372,7 +523,7 @@ public class InventoryMgmtSys {
 					showCategoryMenu();
 					break;
 				case "3":
-					
+					showCustomerMenu();
 					break;
 				case "4":
 					
