@@ -203,7 +203,7 @@ public class InventoryMgmtSys {
 		}
 		
 		if( selectedProduct != null ) {
-			productList.removeProduct( Integer.parseInt(productId) );
+			productList.removeProduct( selectedProduct );
 			System.out.println("Remaining products: " + productList.getTotalNumOfProducts());
 		} else {
 			System.out.println("Product not found!");
@@ -399,10 +399,10 @@ public class InventoryMgmtSys {
 				addNewCustomer();
 				break;
 			case "2":
-
+				editCustomer();
 				break;
 			case "3":
-				
+				removeCustomer();
 				break;
 			case "4":
 				searchCustomer();
@@ -495,6 +495,101 @@ public class InventoryMgmtSys {
 		
 		if( customer != null ) {
 			System.out.println("\nCustomer Details:\n" + customer);
+		} else {
+			System.out.println("Customer not found!");
+		}
+	}
+	
+	public static void editCustomer() {
+		Customer customer = null;
+		String customerId = null;
+		String selectedMenu = "";
+		
+		System.out.println("Please enter the customer id:");
+		customerId = in.nextLine();
+		
+		try {
+			customer = customerList.getCustomerById( Integer.parseInt(customerId) );
+		} catch(NumberFormatException e) {
+		}
+		
+		if( customer != null ) {
+			while( !selectedMenu.toUpperCase().equals("X") ) {
+				
+				System.out.println("\nPlease select from the menu option below:");
+				System.out.println("[1] Edit First Name");
+				System.out.println("[2] Edit Last Name");
+				System.out.println("[3] Edit Phone Number");
+				System.out.println("[4] Edit Email");
+				System.out.println("[X] Cancel");
+				
+				selectedMenu = in.nextLine();
+				
+				switch( selectedMenu ) {
+					case "1":
+						System.out.println("Please enter the new first name:");
+						String newName = in.nextLine();
+						
+						customer.setFirstName(newName);
+						
+						System.out.println("Successfully changed customer first name to " + customer.getFirstName() + "!");
+						
+						break;
+					case "2":
+						System.out.println("Please enter the new last name:");
+						String newLastName = in.nextLine();
+						
+						customer.setLastName(newLastName);
+						
+						System.out.println("Successfully changed customer last name to " + customer.getLastName() + "!");
+						
+						break;
+					case "3":
+						System.out.println("Please enter the new phone number:");
+						String newTelNum = in.nextLine();
+						
+						try {
+							customer.setPhoneNum( Integer.parseInt(newTelNum) );
+							
+							System.out.println("Successfully changed customer phone number to " + customer.getPhoneNum() + "!");
+						} catch(NumberFormatException e) {
+							System.out.println("Invalid phone number entered!");
+						}
+							
+						break;
+					case "4":
+						System.out.println("Please enter the new email addres:");
+						String newEmail = in.nextLine();
+						
+						customer.setEmail(newEmail);
+						
+						System.out.println("Successfully changed customer email to " + customer.getEmail() + "!");
+						break;
+					default:
+						break;
+				}
+			}
+
+		} else {
+			System.out.println("Customer not found!");
+		}
+	}
+	
+	public static void removeCustomer() {
+		Customer customer = null;
+		String customerId = null;
+		
+		System.out.println("Please enter the customer id:");
+		customerId = in.nextLine();
+		
+		try {
+			customer = customerList.getCustomerById( Integer.parseInt(customerId) );
+		} catch(NumberFormatException e) {
+		}
+		
+		if( customer != null ) {
+			customerList.removeCustomer(customer);
+			System.out.println("Remaining customers: " + customerList.getTotalNumOfCustomers());
 		} else {
 			System.out.println("Customer not found!");
 		}

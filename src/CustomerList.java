@@ -13,11 +13,22 @@ public class CustomerList {
 		}
 	}
 	
-	public Customer getCustomerById(int id) {
-		try {
-			return this.customers.get(id);
-		} catch(IndexOutOfBoundsException e) {
-			return null;
+	public Customer getCustomerById(int id) {		
+		for(int i = 0; i < this.customers.size(); i++) {
+			if( this.customers.get(i).getId() == id ) {
+				return this.customers.get(i);
+			}
 		}
+
+		return null; 
 	}
+	
+	public void removeCustomer(Customer cust) {
+		this.customers.remove(cust);
+	}
+	
+	public int getTotalNumOfCustomers() {
+		return this.customers.size();
+	}
+	
 }

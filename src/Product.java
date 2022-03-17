@@ -78,6 +78,10 @@ public class Product {
 		this.category = category;
 	}
 	
+	public int getId() {
+		return this.id;
+	}
+	
 	public String toString() {
 		return "Product id: " + this.id + "\nName: " + this.name + "\nPrice: " + this.price +
 				"\nQuantity: " + this.quantity + "\nDescription: " + this.description + 

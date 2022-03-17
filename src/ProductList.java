@@ -10,17 +10,19 @@ public class ProductList {
 		int id = this.products.size() + 1;
 		this.products.add( new Product(id, name, price, quantity, image, description, category) );
 	}
-	
-	public Product getProductById(int id) {
-		try {
-			return this.products.get(id);
-		} catch(IndexOutOfBoundsException e) {
-			return null;
+
+	public Product getProductById(int id) {		
+		for(int i = 0; i < this.products.size(); i++) {
+			if( this.products.get(i).getId() == id ) {
+				return this.products.get(i);
+			}
 		}
+
+		return null; 
 	}
 	
-	public void removeProduct(int id) {
-		this.products.remove(id);
+	public void removeProduct(Product product) {
+		this.products.remove(product);
 	}
 	
 	public int getTotalNumOfProducts() {
