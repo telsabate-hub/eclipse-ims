@@ -50,4 +50,9 @@ public class ProductList {
 		
 		return productList;
 	}
+	
+	public ArrayList<Product> getAllProducts(){
+		return this.products;
+	}
+	
 }

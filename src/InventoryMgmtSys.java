@@ -6,6 +6,7 @@ public class InventoryMgmtSys {
 	static ProductList productList = new ProductList();
 	static CategoryList categoryList = new CategoryList();
 	static CustomerList customerList = new CustomerList();
+	static Cart cart = new Cart();
 	
 	public static void addNewProduct() {
 		int price = 0, quantity = 0;
@@ -312,13 +313,37 @@ public class InventoryMgmtSys {
 		
 		selectedMenu = in.nextLine();
 		
+		String categoryName;
+		
 		switch( selectedMenu ) {
 			case "1":
-				System.out.println("Please enter the name of the category:");
-				String categoryName = in.nextLine();
+				
+				boolean invalidInput;
+				
+				do {
+					invalidInput = false;
+					
+					System.out.println("Please enter the name of the category:");
+					categoryName = in.nextLine();
+					categoryName = categoryName.trim();
+					
+					var invalidName = categoryList.isExistingCategory(categoryName);
+					
+					if(invalidName) {
+						invalidInput = true;
+						System.out.println("Category name already exists!");
+					}
+					
+					if( categoryName.equals("") ) {
+						invalidInput = true;
+						System.out.println("Invalid category name!");
+					}
+				
+				} while( invalidInput );
+					
 				categoryList.addCategory(categoryName);
 				System.out.println("Successfully added " + categoryName + " to the category list!");
-				
+					
 				break;
 			case "2":
 				
@@ -594,6 +619,189 @@ public class InventoryMgmtSys {
 			System.out.println("Customer not found!");
 		}
 	}
+	
+	public static void showOrderMenu() {
+		String selectedMenu = "";
+		
+		System.out.println("\nPlease select from the menu option below:");
+		System.out.println("[1] Insert Order");
+		System.out.println("[2] Show All Orders");
+		
+		selectedMenu = in.nextLine();
+		
+		switch( selectedMenu ) {
+			case "1":
+				showCartMenu();
+				break;
+			case "2":
+				break;
+			default:
+				System.out.println("Invalid menu option! Redirecting to main menu...");
+				break;
+		}
+	}
+	
+	public static void insertOrder() {
+		ArrayList<Product> allProducts = productList.getAllProducts();
+		String selectedProductId = "";
+		Product selectedProduct = null;
+		
+		if( allProducts.size() > 0 ) {
+			boolean validProductId = true;
+			
+			do {
+				validProductId = true;
+				
+				System.out.println("\nPlease select from the products below:");
+				
+				for( int i=0; i < allProducts.size(); i++ ) {
+					int productId = allProducts.get(i).getId();
+					String productName = allProducts.get(i).getName();
+					float productPrice = allProducts.get(i).getPrice();
+					int productQuantity = allProducts.get(i).getQuantity();
+					
+					System.out.println("[" + productId + "] " + productName + "\nPrice: " + productPrice + 
+							"\nQuantity: " + productQuantity );
+				}
+				
+				selectedProductId = in.nextLine();
+				
+				try {
+					selectedProduct = productList.getProductById(Integer.parseInt(selectedProductId));
+				} catch(NumberFormatException e) {
+				}
+				
+				if( selectedProduct != null ) {
+					System.out.println("Please enter the number of ordered items:");
+					
+					try {
+						int itemCount = Integer.parseInt(in.nextLine());
+						
+						if( itemCount > 0 ) {
+							int selectedProductQuantity = selectedProduct.getQuantity();
+							
+							if( selectedProductQuantity < itemCount ) {
+								System.out.println("Not enough items on stock");
+							} else {
+								cart.addItem(selectedProduct, itemCount);
+								System.out.println("Successfully added item to cart!");
+							}
+							
+							System.out.println("\n" + cart);
+							
+						} else {
+							validProductId = false;
+							System.out.println("Invalid value entered!");
+						}
+						
+					} catch(NumberFormatException e) {
+						validProductId = false;
+						System.out.println("Invalid value entered!");
+					}
+					
+				} else {
+					validProductId = false;
+					System.out.println("Invalid product id entered!");
+				}
+			} while( !validProductId );
+			
+		} else {
+			System.out.println("No products added yet!");
+		}
+	}
+	
+	public static void showCartMenu() {
+		String selectedMenu = "";
+		boolean isOrderPlaced = false;
+		
+		do {
+			System.out.println("\nPlease select from the options below:");
+			System.out.println("[1] Add Item");
+			System.out.println("[2] Edit Item Quantity");
+			System.out.println("[3] Remove Item");
+			System.out.println("[4] Clear Cart");
+			System.out.println("[5] Place Order");
+			
+			selectedMenu = in.nextLine();
+			
+			switch( selectedMenu ) {
+				case "1":
+					insertOrder();
+					break;
+				case "2":
+					editItem();
+					break;
+				case "3":
+					removeItem();
+					break;
+				case "4":
+					cart.clear();
+					System.out.println("\n" + cart);
+					break;
+				case "5":
+					isOrderPlaced = true;
+					break;
+				default:
+					System.out.println("Invalid menu option!");
+					break;
+			}
+		} while(!isOrderPlaced);
+	}
+	
+	public static void removeItem() {
+		System.out.println("Please enter the product id:");
+		String productId = in.nextLine();
+		
+		try {
+			cart.removeItem(Integer.parseInt(productId));
+			System.out.println("\n" + cart);
+			
+		} catch(Exception e) {
+			System.out.println("Error removing item!");
+		}
+	}
+	
+	public static void editItem() {
+		System.out.println("Please enter the product id:");
+		String productId = in.nextLine();
+		
+		Product selectedProduct = null;
+		
+		try {
+			selectedProduct = productList.getProductById(Integer.parseInt(productId));
+		} catch(NumberFormatException e) {
+		}
+		
+		if( selectedProduct != null ) {
+			System.out.println("Please enter the number of ordered items:");
+			
+			try {
+				int itemCount = Integer.parseInt(in.nextLine());
+				
+				if( itemCount > 0 ) {
+					int selectedProductQuantity = selectedProduct.getQuantity();
+					
+					if( selectedProductQuantity < itemCount ) {
+						System.out.println("Not enough items on stock");
+					} else {
+						cart.editItem(selectedProduct, itemCount);
+						System.out.println("Successfully added item to cart!");
+					}
+					
+					System.out.println("\n" + cart);
+					
+				} else {
+					System.out.println("Invalid value entered!");
+				}
+				
+			} catch(NumberFormatException e) {
+				System.out.println("Invalid value entered!");
+			}
+			
+		} else {
+			System.out.println("Invalid product id entered!");
+		}
+	}
 
 	public static void main(String args[]) {
 		System.out.println("Starting Inventory Management System...");
@@ -621,7 +829,7 @@ public class InventoryMgmtSys {
 					showCustomerMenu();
 					break;
 				case "4":
-					
+					showOrderMenu();
 					break;
 				default:
 					break;

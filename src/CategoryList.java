@@ -36,4 +36,12 @@ public class CategoryList {
 	public void deleteCategory(int idx) {
 		this.categories.remove(idx);
 	}
+	
+	public ArrayList<String> getAllCategories(){
+		return this.categories;
+	}
+	
+	public boolean isExistingCategory(String category) {
+		return this.categories.contains(category);
+	}
 }

@@ -3,13 +3,13 @@ import javax.swing.ImageIcon;
 public class Product {
 	private int id;
 	private String name;
-	private int price;
+	private float price;
 	private int quantity;
 	private ImageIcon image;
 	private String description;
 	private String category;
 	
-	public Product(int id, String name, int price, int quantity, ImageIcon image, String description,
+	public Product(int id, String name, float price, int quantity, ImageIcon image, String description,
 					String category) {
 		this.id = id;
 		this.name = name;
@@ -38,12 +38,12 @@ public class Product {
 		return this.name;
 	}
 
-	public int getPrice() {
+	public float getPrice() {
 		return price;
 	}
 
-	public void setPrice(int price) {
-		this.price = price;
+	public void setPrice(float price2) {
+		this.price = price2;
 	}
 
 	public int getQuantity() {
