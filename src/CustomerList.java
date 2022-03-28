@@ -31,4 +31,15 @@ public class CustomerList {
 		return this.customers.size();
 	}
 	
+	public String toString() {
+		String customersStr = "";
+		
+		for( int i = 0; i < this.customers.size(); i++ ) {
+			Customer customer = this.customers.get(i);
+			customersStr += "\n[" + (i + 1) + "] Customer id: " + customer.getId() + "\nCustomer Name: " +
+						customer.getFirstName() + " " + customer.getLastName();
+		}
+		
+		return customersStr;
+	}
 }

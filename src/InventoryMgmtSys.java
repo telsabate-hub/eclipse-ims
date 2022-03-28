@@ -7,6 +7,7 @@ public class InventoryMgmtSys {
 	static CategoryList categoryList = new CategoryList();
 	static CustomerList customerList = new CustomerList();
 	static Cart cart = new Cart();
+	static OrderList orderList = new OrderList();
 	
 	public static void addNewProduct() {
 		int price = 0, quantity = 0;
@@ -739,6 +740,7 @@ public class InventoryMgmtSys {
 					System.out.println("\n" + cart);
 					break;
 				case "5":
+					placeOrder();
 					isOrderPlaced = true;
 					break;
 				default:
@@ -801,6 +803,35 @@ public class InventoryMgmtSys {
 		} else {
 			System.out.println("Invalid product id entered!");
 		}
+	}
+	
+	public static void placeOrder() {
+		boolean invalidInput;
+		Customer customer = null;
+		
+		do {
+			try {
+				invalidInput = false;	
+	
+				System.out.println("\nPlease enter the customer id for the order:\n" + customerList);
+				String custId = in.nextLine();
+				
+				customer = customerList.getCustomerById( Integer.parseInt(custId) );
+			
+				if( customer == null ) {
+					System.out.println("Invalid customer id entered!");
+					invalidInput = true;
+				} else {
+					orderList.addOrder(Integer.parseInt(custId));
+				}
+				
+			} catch( NumberFormatException e ) {
+				System.out.println("Invalid customer id entered!");
+				invalidInput = true;
+			}
+			
+		} while(invalidInput);
+		
 	}
 
 	public static void main(String args[]) {
