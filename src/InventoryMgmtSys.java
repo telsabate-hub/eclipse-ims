@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.Hashtable;
 import java.util.Scanner;
 
 public class InventoryMgmtSys {
@@ -722,8 +723,10 @@ public class InventoryMgmtSys {
 			System.out.println("[3] Remove Item");
 			System.out.println("[4] Clear Cart");
 			System.out.println("[5] Place Order");
+			System.out.println("[X] Cancel");
 			
 			selectedMenu = in.nextLine();
+			selectedMenu = selectedMenu.toLowerCase();
 			
 			switch( selectedMenu ) {
 				case "1":
@@ -741,6 +744,9 @@ public class InventoryMgmtSys {
 					break;
 				case "5":
 					placeOrder();
+					isOrderPlaced = true;
+					break;
+				case "x":
 					isOrderPlaced = true;
 					break;
 				default:
@@ -808,6 +814,19 @@ public class InventoryMgmtSys {
 	public static void placeOrder() {
 		boolean invalidInput;
 		Customer customer = null;
+		int numOfCustomers = customerList.getTotalNumOfCustomers();
+		int itemsCount = cart.getTotalNumberOfItems();
+		
+		if( numOfCustomers <= 0 ) {
+			System.out.println("No customers added yet. Please add customer first.");
+			return;
+		}
+		
+		if( itemsCount <= 0 ) {
+			System.out.println("Cannot place order with empty cart.");
+			showCartMenu();
+			return;
+		}
 		
 		do {
 			try {
@@ -823,6 +842,19 @@ public class InventoryMgmtSys {
 					invalidInput = true;
 				} else {
 					orderList.addOrder(Integer.parseInt(custId));
+					System.out.println("Successfully placed order for " + customer.getFirstName() +
+							" " + customer.getLastName());
+					
+					Hashtable<Integer, Integer> cartItems = cart.getItemsCount();
+					
+					for(Integer key : cartItems.keySet()) {
+						Product product = productList.getProductById(key);
+						int currentQty = product.getQuantity();
+						
+						product.setQuantity(currentQty - cartItems.get(key));
+					}
+					
+					cart.clear();
 				}
 				
 			} catch( NumberFormatException e ) {

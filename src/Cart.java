@@ -84,4 +84,12 @@ public class Cart {
 		return retStr;
 	}
 	
+	public int getTotalNumberOfItems() {
+		return this.itemsCount.size();
+	}
+	
+	public Hashtable<Integer, Integer> getItemsCount(){
+		return this.itemsCount;
+	}
+	
 }
