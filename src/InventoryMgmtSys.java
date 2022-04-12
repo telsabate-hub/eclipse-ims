@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Hashtable;
 import java.util.Scanner;
 
@@ -636,6 +637,7 @@ public class InventoryMgmtSys {
 				showCartMenu();
 				break;
 			case "2":
+				System.out.println(orderList);
 				break;
 			default:
 				System.out.println("Invalid menu option! Redirecting to main menu...");
@@ -854,6 +856,10 @@ public class InventoryMgmtSys {
 						
 						product.setQuantity(currentQty - cartItems.get(key));
 					}
+					
+					customer.setOrdersCount(customer.getOrdersCount() + 1);
+					customer.setLastOrderDate(new Date());
+					customer.setTotalOrdersAmount(customer.getTotalOrdersAmount() + cart.getTotalAmount());
 					
 					cart.clear();
 				}

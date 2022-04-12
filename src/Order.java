@@ -10,4 +10,8 @@ public class Order {
 		this.date = date;
 		this.customerId = customerId;
 	}
+	
+	public String toString() {
+		return "Order id: " + this.id + "\nDate: " + this.date + "\nCustomer Id: " + this.customerId;
+	}
 }

@@ -102,4 +102,8 @@ public class Cart {
 		return count;
 	}
 	
+	public float getTotalAmount() {
+		return this.totalAmount;
+	}
+	
 }
