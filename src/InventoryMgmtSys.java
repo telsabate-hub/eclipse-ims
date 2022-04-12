@@ -681,8 +681,9 @@ public class InventoryMgmtSys {
 						
 						if( itemCount > 0 ) {
 							int selectedProductQuantity = selectedProduct.getQuantity();
+							int itemCountInCart = cart.getNumberOfItem(selectedProduct.getId());
 							
-							if( selectedProductQuantity < itemCount ) {
+							if( selectedProductQuantity < itemCount + itemCountInCart ) {
 								System.out.println("Not enough items on stock");
 							} else {
 								cart.addItem(selectedProduct, itemCount);
