@@ -92,4 +92,14 @@ public class Cart {
 		return this.itemsCount;
 	}
 	
+	public int getNumberOfItem(int productId) {
+		int count = 0;
+		
+		if( this.itemsCount.get(productId) != null ) {
+			count = this.itemsCount.get(productId);
+		}
+		
+		return count;
+	}
+	
 }
